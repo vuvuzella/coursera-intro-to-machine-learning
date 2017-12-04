@@ -13,9 +13,12 @@ J = 0;
 % Instructions: Compute the cost of a particular choice of theta
 %               You should set J to the cost.
 
-
-
-
+% X - m x 2, with x values for x0 and x1
+% y - column vector of y data
+% theta - coulumn vector for theta0 and theta1 respectively
+%   X        theta
+% [m x 2] * [2 x 1] 
+J = (sum(((X * theta) - y) .^ 2)) / (2 * m)
 
 % =========================================================================
 
