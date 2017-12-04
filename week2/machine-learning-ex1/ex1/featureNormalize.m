@@ -6,9 +6,9 @@ function [X_norm, mu, sigma] = featureNormalize(X)
 %   working with learning algorithms.
 
 % You need to set these values correctly
-X_norm = X;
-mu = zeros(1, size(X, 2));
-sigma = zeros(1, size(X, 2));
+X_norm = X;                     % m x 2 matrix
+mu = zeros(1, size(X, 2));      % 1 x 2 row vector
+sigma = zeros(1, size(X, 2));   % 1 x 2 row vector
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: First, for each feature dimension, compute the mean
@@ -25,11 +25,37 @@ sigma = zeros(1, size(X, 2));
 %
 % Hint: You might find the 'mean' and 'std' functions useful.
 %       
+row_size = size(X, 1);
+
+size_mean = zeros(row_size, 1);
+size_mu = mean(X(:,2));
+size_mean(:) = size_mu;
+size_diff = X(:,2) - size_mean;
+
+size_std = zeros(row_size, 1);
+size_sigma = std(X(:,2));
+size_std(:) = size_sigma;
+
+size_norm = size_diff ./ size_std;
+
+bed_mean = zeros(row_size, 1);
+bed_mu = mean(X(:,2));
+bed_mean(:) = bed_mu;
+bed_diff = X(:,2) - bed_mean;
 
 
+bed_std = zeros(row_size, 1);
+bed_sigma = std(X(:,2));
+bed_std(:) = bed_sigma;
 
+bed_norm = bed_diff ./ bed_std;
 
-
+X_norm(:,1) = size_norm;
+X_norm(:,2) = bed_norm;
+mu(:,1) = size_mu;
+mu(:,2) = bed_mu;
+sigma(:,1) = size_sigma;
+sigma(:,2) = bed_sigma;
 
 
 

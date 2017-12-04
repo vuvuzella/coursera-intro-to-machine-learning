@@ -18,7 +18,7 @@ J = 0;
 % theta - coulumn vector for theta0 and theta1 respectively
 %   X        theta
 % [m x 2] * [2 x 1] 
-J = (sum(((X * theta) - y) .^ 2)) / (2 * m)
+J = (sum(((X * theta) - y) .^ 2)) / (2 * m);
 
 % =========================================================================
 
