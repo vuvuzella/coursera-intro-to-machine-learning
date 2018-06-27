@@ -4,13 +4,13 @@ function g = sigmoid(z)
 
 % You need to return the following variables correctly 
 g = zeros(size(z));
+one_matrix = ones(size(z));
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: Compute the sigmoid of each value of z (z can be a matrix,
 %               vector or scalar).
-
-euclid = exp(z);
-g = 1 / (1 + euclid);
+euclid = exp(-z);
+g = one_matrix ./ (one_matrix + euclid);
 
 % =============================================================
 

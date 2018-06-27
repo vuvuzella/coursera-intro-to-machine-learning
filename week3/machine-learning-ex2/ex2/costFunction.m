@@ -10,6 +10,8 @@ m = length(y); % number of training examples
 % You need to return the following variables correctly 
 J = 0;
 grad = zeros(size(theta));
+one_matrix = ones(size(X));
+one_vector = ones(size(y));
 
 % ====================== YOUR CODE HERE ======================
 % Instructions: Compute the cost of a particular choice of theta.
@@ -20,12 +22,13 @@ grad = zeros(size(theta));
 % Note: grad should have the same dimensions as theta
 %
 
+% Calculate the cost at current theta value
+first_term = -y .* log(sigmoid(X * theta));
+second_term = (1.-y) .* log(1.-sigmoid(X * theta));
+J = sum(first_term - second_term)/m;
 
-
-
-
-
-
+% Calculate the gradient of the cost
+grad = sum((sigmoid(X * theta) - y) .* X) / m;
 
 % =============================================================
 
