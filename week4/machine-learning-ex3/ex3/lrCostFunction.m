@@ -36,17 +36,30 @@ grad = zeros(size(theta));
 %           grad = grad + YOUR_CODE_HERE (using the temp variable)
 %
 
+% Cost function with regularization
+h_x = sigmoid(X * theta);
+first_term = -y .* log(h_x);
+second_term = (1 - y) .* log(1 - h_x);
 
+% regularization term
+lambda_term = lambda / (2 * m);
+reg_term = lambda_term * sum(theta(2:end) .^ 2);
+cost_term = (sum(first_term - second_term) / m);
 
+% Cost function evaluation with regularization
+J = cost_term + reg_term;
 
-
-
-
-
-
+% Gradient with regularization
+computed_real_difference = h_x - y;
+theta_0 = sum(computed_real_difference .* X(:,1)) / m;
+% disp(theta_0);
+theta_1_m_sum = (sum(computed_real_difference .* X(:,2:end)) / m );
+grad_reg_term = transpose((lambda / m) .* theta(2:end));
+theta_1_end = theta_1_m_sum + grad_reg_term;
+% disp("\n");
+% disp(theta_1_end);
+grad = [theta_0 theta_1_end];
 
 % =============================================================
-
-grad = grad(:);
 
 end
