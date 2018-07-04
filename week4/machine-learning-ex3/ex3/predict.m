@@ -21,10 +21,25 @@ p = zeros(size(X, 1), 1);
 %       can use max(A, [], 2) to obtain the max for each row.
 %
 
+% add the bias theta on all inputs
+aug_inputs = [ones(m, 1) X];
+% disp(size(aug_inputs));
+% disp(size(Theta1));
 
+% Predict using the hypothesis function
+% and the trained theta -> hidden layer 1
+hidden_1 = sigmoid(aug_inputs * transpose(Theta1));
+% disp(size(hidden_1));
 
+% Add in the bias theta in the hidden_1's outputs
+bias_term = ones(size(hidden_1, 1), 1);
+% disp(size(bias_term));
 
+aug_hidden_1 = [bias_term hidden_1];
+% disp(size(aug_hidden_1));
+output = sigmoid(aug_hidden_1 * transpose(Theta2));
 
+[M, p] = max(output, [], 2);
 
 
 
