@@ -36,11 +36,21 @@ grad = zeros(size(theta));
 %           grad = grad + YOUR_CODE_HERE (using the temp variable)
 %
 
+% Cost function evaluation
+h_x = sigmoid(X * theta);
+first_term = -y .* log(h_x);
+second_term = (1 - y) .* log(1 - h_x);
+non_reg_cost = sum(first_term - second_term) / m;
+reg_term = (lambda / (2 * m)) * sum(theta(2:end) .^ 2);
+J = non_reg_cost + reg_term;
 
-
-
-
-
+% Gradient function evaluation
+error = h_x - y;
+theta_0 = sum(error .* X(:, 1)) / m;
+% disp(theta_0);
+grad_reg_term = transpose((lambda / m) .* theta(2:end));
+theta_1_m =(grad_reg_term + (sum(error .* X(:, 2:end)) ./ m));
+grad = [theta_0 theta_1_m];
 
 
 
