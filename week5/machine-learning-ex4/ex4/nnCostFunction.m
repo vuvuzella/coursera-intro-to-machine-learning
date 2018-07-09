@@ -62,14 +62,48 @@ Theta2_grad = zeros(size(Theta2));
 %               and Theta2_grad from Part 2.
 %
 
+% NN Cost function without regularization
+a1 = [ones(m,1) X];
+% disp(size(Theta1));
 
+z2 = Theta1 * transpose(a1);
+a2 = sigmoid(z2);
+m_a2 = size(a2, 2);
+a2 = [ones(1, m_a2); a2];
+% disp(size(a2));
 
+z3 = Theta2 * a2;
+a3 = transpose(sigmoid(z3));
+% disp(size(a3));
+% disp(size(y));
 
+cost_term = zeros(size(a3));
+first_term = zeros(size(a3, 2));
+second_term = zeros(size(a3, 2));
+% disp(size(first_term));
+% disp(size(a3(1, :)));
 
+for n = 1:m
+    aug_label = zeros(1, num_labels);
+    aug_label(y(n)) = 1;
+    
+    % disp(y(n));
+    % disp(aug_label);
+    
+    first_term = -aug_label .* log(a3(n,:));
+    second_term = (1 - aug_label) .* log(1 - a3(n, :));
+%    disp(size(first_term));
+%    disp(size(second_term));
 
+    cost_term(n, :) = first_term - second_term;
+end
 
+% disp(sum(sum(cost_term, 2), 1)/m);
 
+sum_K = sum(cost_term, 2);
+sum_m = sum(sum_K);
 
+J = sum_m / m;
 
 
 
