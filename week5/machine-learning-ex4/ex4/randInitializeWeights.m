@@ -18,14 +18,10 @@ W = zeros(L_out, 1 + L_in);
 %
 % Note: The first column of W corresponds to the parameters for the bias unit
 %
-
-
-
-
-
-
-
-
+epsilon_init = 0.12 % based on the number of units in the network
+                    % epsilon_init = sqrt(6) / (sqrt(L_in + L_out))
+                    % where L_in = s_l, L_out = s_l+1
+W = rand(L_out, 1 + L_in) * 2 * epsilon_init - epsilon_init;
 
 % =========================================================================
 

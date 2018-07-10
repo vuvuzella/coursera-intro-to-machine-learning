@@ -78,20 +78,24 @@ a3 = transpose(sigmoid(z3));
 % disp(size(y));
 
 cost_term = zeros(size(a3));
-first_term = zeros(size(a3, 2));
-second_term = zeros(size(a3, 2));
+% first_term = zeros(size(a3, 2));  % preallocation not needed
+% second_term = zeros(size(a3, 2)); % preallocation not needed
 % disp(size(first_term));
 % disp(size(a3(1, :)));
 
+% create augmented label
+output = 1:num_labels;
+aug_label = gen_aug_labels(y,output');
+
 for n = 1:m
-    aug_label = zeros(1, num_labels);
-    aug_label(y(n)) = 1;
+    % aug_label = zeros(1, num_labels);
+    % aug_label(y(n)) = 1;
     
     % disp(y(n));
     % disp(aug_label);
     
-    first_term = -aug_label .* log(a3(n,:));
-    second_term = (1 - aug_label) .* log(1 - a3(n, :));
+    first_term = -aug_label(n, :) .* log(a3(n,:));
+    second_term = (1 - aug_label(n, :)) .* log(1 - a3(n, :));
 %    disp(size(first_term));
 %    disp(size(second_term));
 
@@ -130,9 +134,52 @@ theta2_sum_m = sum(theta2_sum_features);
 reg_term = (lambda / (2 * m))  * (theta1_sum_m + theta2_sum_m);
 
 % Calulate regularized cost / loss function value
-J = J + reg_term;
+J = J + reg_term;   % Forward Propagation with regularization
+
+theta1_accum = zeros(size(Theta1));
+theta2_accum = zeros(size(Theta2));
 
 
+
+% Back propagation
+for n = 1:m
+
+    % feed forward
+    f_a1 = [1;transpose(X(n,:))]; % 401 x 1
+    % disp(size(a1));
+    f_z2 =Theta1 * f_a1;   % 25 x 1
+    f_a2 = [1; sigmoid(f_z2)];  % 26 x 1
+    % disp(size(f_a2));
+    f_z3 = Theta2 * f_a2;
+    % disp(size(f_z3));
+    f_a3 = sigmoid(f_z3);   % 10 x 1 h_x
+    % disp(size(f_a3));
+    
+    % Feed Backward
+    % delta 3 for output layer
+    % disp(f_a3);
+    d3 = f_a3 - transpose(aug_label(n, :)); % 10 x 1
+    % disp(size(d3));
+    
+    d2 = (transpose(Theta2(:,2:end)) * d3) .* sigmoidGradient(f_z2); % 26 x 1
+    % d2 = d2(2:end); % 25 x 1 bias term removed
+    % disp(size(d2));
+    
+    theta1_accum = theta1_accum + (d2 * transpose(f_a1));
+    theta2_accum = theta2_accum + (d3 * transpose(f_a2));
+end
+
+Theta1_grad = theta1_accum / m;
+Theta2_grad = theta2_accum / m;
+
+% Regularize the gradient
+theta1_reg_term = (lambda / m) * Theta1(:,2:end);
+theta1_reg_term = [zeros(size(Theta1,1), 1) theta1_reg_term];
+theta2_reg_term = (lambda / m) * Theta2(:,2:end);
+theta2_reg_term = [zeros(size(Theta2,1), 1) theta2_reg_term];
+
+Theta1_grad = Theta1_grad + theta1_reg_term;
+Theta2_grad = Theta2_grad + theta2_reg_term;
 
 % -------------------------------------------------------------
 
@@ -142,4 +189,14 @@ J = J + reg_term;
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
 
 
+end
+
+function aug = gen_aug_labels(labels, K)
+    h = size(labels, 1);
+    aug = zeros(size(labels, 1), size(K, 1));
+
+    for i = 1:h
+        aug(i,:) = K;
+    end
+    aug = aug == labels;
 end
