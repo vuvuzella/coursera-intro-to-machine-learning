@@ -105,12 +105,32 @@ sum_m = sum(sum_K);
 
 J = sum_m / m;
 
+% Calculate regularization term
 
+% Calculate Theta1 regularization
+theta1_row_size = size(Theta1, 1);
+theta1_sum_features = zeros(theta1_row_size, 1);
+% disp(theta1_row_size)
+for n = 1:theta1_row_size
+    theta1_sum_features(n, :) = sum(Theta1(n, 2:end) .^ 2, 2);
+end
+% disp(size(theta1_sum_features));
+theta1_sum_m = sum(theta1_sum_features);
 
+% Calculate Theta2 regularization
+theta2_row_size = size(Theta2, 1);
+theta2_sum_features = zeros(theta2_row_size, 1);
+for n = 1:theta2_row_size
+    theta2_sum_features(n, :) = sum(Theta2(n, 2:end) .^ 2, 2);
+end
+% disp(size(theta2_sum_features));
+theta2_sum_m = sum(theta2_sum_features);
 
+% Calculate total regularization term
+reg_term = (lambda / (2 * m))  * (theta1_sum_m + theta2_sum_m);
 
-
-
+% Calulate regularized cost / loss function value
+J = J + reg_term;
 
 
 
