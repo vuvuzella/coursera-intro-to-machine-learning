@@ -53,10 +53,28 @@ error_val   = zeros(m, 1);
 
 % ---------------------- Sample Solution ----------------------
 
+% Get theta
+thetas = zeros(m, size(X, 2));
+for i = 1:m
+    
+    % Train the hypothesis using i number of data
+    x_train = X(1:i, :);
+    y_train = y(1:i, :);
+    % thetas(i, :) = trainLinearReg(x_train, y_train, lambda);
+    theta = trainLinearReg(x_train, y_train, lambda);
+    
+    % h_x_train = X * theta;
+    h_x_train = linearRegCostFunction(x_train, y_train, theta, 0);
+    % error_train(i) = sum((h_x_train - y_train) .^ 2) / (2 * m);
+    [error_train(i) grad] = linearRegCostFunction(x_train, y_train, theta, 0);
+    
+    % h_x_cv = Xval * theta;
+    % h_x_cv = linearRegCostFunction(Xval, yval, theta, 0);
+    % error_val(i) = sum((h_x_cv - yval) .^ 2) / (2 * m);
+    [error_val(i), grad] = linearRegCostFunction(Xval, yval, theta, 0);
+end
 
-
-
-
+% disp(thetas);
 
 
 % -------------------------------------------------------------
