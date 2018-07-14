@@ -97,13 +97,10 @@ while ~isempty(email_contents)
     %       str2). It will return 1 only if the two strings are equivalent.
     %
 
-
-
-
-
-
-
-
+    [in_array, word_idx] = is_in_array(vocabList, str);
+    if in_array == true
+        word_indices = [word_indices; word_idx];
+    end
 
 
     % =============================================================
@@ -122,4 +119,19 @@ end
 % Print footer
 fprintf('\n\n=========================\n');
 
+end
+
+function [bool_inArray, idx] = is_in_array(arr, value)
+
+    bool_inArray = false;
+    idx = -1;
+    
+    arr_length = numel(arr);
+    for i = 1:arr_length
+        if strcmp(arr{i}, value) == 1
+            idx = i;
+            bool_inArray = true;
+            break;
+        end
+    end
 end
