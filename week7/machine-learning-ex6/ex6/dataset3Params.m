@@ -23,7 +23,41 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+c_vec = [0.01; 0.03; 0.1; 0.3; 1; 3; 10; 30];
+c_vec_length = length(c_vec);
+sigma_vec = [0.01; 0.03; 0.1; 0.3; 1; 3; 10; 30];
+sigma_vec_length = length(sigma_vec);
+models = [];
 
+for i = 1:c_vec_length
+    for j = 1:sigma_vec_length
+        newmod = svmTrain(X, y, c_vec(i), @(x1, x2) gaussianKernel(x1, x2, sigma_vec(j)));
+        pred = svmPredict(newmod, Xval);
+        pred_error = mean(double(pred ~= yval));
+        newStruct = struct('c', c_vec(i), 'sigma', sigma_vec(j), 'model', newmod, 'pred_error', pred_error);
+        models = [models; newStruct];
+    end
+end
+
+% disp(size(models));
+% disp(models);
+models_count = length(models);
+
+optimum_c_sigma = models(1);
+
+for i = 1:models_count
+    if models(i).pred_error < optimum_c_sigma.pred_error
+        optimum_c_sigma = models(i);
+    end
+end
+
+% disp('optimum C: ');
+% disp(optimum_c_sigma.c);
+% disp('optimum sigma: ');
+% disp(optimum_c_sigma.sigma)
+
+c = optimum_c_sigma.c;
+sigma = optimum_c_sigma.sigma;
 
 
 

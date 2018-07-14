@@ -16,6 +16,10 @@ sim = 0;
 %
 %
 
+% Gaussian kernel implementation
+diff = x1 - x2;
+diff_mag = sqrt(sum(diff .^ 2)) ^ 2;
+sim = exp(-(diff_mag / (2 * (sigma^2)))); 
 
 
 
