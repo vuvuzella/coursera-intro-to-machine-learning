@@ -20,14 +20,28 @@ idx = zeros(size(X,1), 1);
 %
 % Note: You can use a for-loop over the examples to compute this.
 %
-
-
-
-
-
-
+m = size(X, 1);
+for i = 1:m
+    dist = 0;
+    tempDist = 0;
+    centroid_index = 0;
+    
+    for j = 1:K
+        tempDist = vector_distance(X(i,:), centroids(j,:));
+        if tempDist < dist || j == 1
+            dist = tempDist;
+            centroid_index = j;
+        end    
+    end
+    
+    idx(i) = centroid_index;
+end
 
 % =============================================================
 
 end
 
+function dist = vector_distance(v1, v2)
+    diff = v1 - v2;
+    dist = sqrt(sum(diff .^ 2));
+end
