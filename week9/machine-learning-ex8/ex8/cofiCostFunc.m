@@ -40,19 +40,34 @@ Theta_grad = zeros(size(Theta));
 %                     partial derivatives w.r.t. to each element of Theta
 %
 
+% Compute for the cost function
+h_x = (X * Theta') .* R;
+selected_y = Y .* R;
+diff = (h_x - selected_y); % num_movies x num_users
+diff_squared = diff .^ 2;
+J = sum(sum(diff_squared)) / 2;
 
+% Compute the cost function
+user_reg_term = sum(sum(Theta .^ 2)) * (lambda / 2);
+mov_reg_term = sum(sum(X .^ 2)) * (lambda / 2);
 
+% Cost function with regularization
+J = J + user_reg_term + mov_reg_term;
+% disp(size(J));
 
+% Compute gradient for movies and users
+X_grad = diff * Theta;
+Theta_grad = diff' * X; 
 
+% regularization
+% compute the reg term
+mov_grad_reg_term = lambda .* X; % num_features x 1 
+user_grad_reg_term = lambda .* Theta; % num_users x 1
+% disp(size(mov_grad_reg_term));
 
-
-
-
-
-
-
-
-
+% Add regularization for Movies and Users
+X_grad = X_grad + mov_grad_reg_term;
+Theta_grad = Theta_grad + user_grad_reg_term;
 
 
 % =============================================================
